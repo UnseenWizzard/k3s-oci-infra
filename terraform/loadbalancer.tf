@@ -23,12 +23,32 @@ resource "oci_load_balancer_backend_set" "k3s_loadbalancer_backendset" {
   policy           = "ROUND_ROBIN"
 
   health_checker {
-    port                = "80"
-    protocol            = "HTTP"
-    response_body_regex = ".*"
-    url_path            = "/"
+    port                = "443"
+    protocol            = "TCP"
   }
 
 }
 
-# TODO: missing backends?
+resource "oci_load_balancer_backend" "main_server_backend" {
+  #Required
+  backendset_name  = oci_load_balancer_backend_set.k3s_loadbalancer_backendset.name
+  ip_address       = local.node_config.main_server_ip
+  load_balancer_id = oci_load_balancer_load_balancer.k3s_loadbalancer.id
+  port             = 443
+}
+
+resource "oci_load_balancer_backend" "secondary_server_backend" {
+  #Required
+  backendset_name  = oci_load_balancer_backend_set.k3s_loadbalancer_backendset.name
+  ip_address       = local.node_config.secondary_server_ip
+  load_balancer_id = oci_load_balancer_load_balancer.k3s_loadbalancer.id
+  port             = 443
+}
+
+resource "oci_load_balancer_listener" "k3s_loadbalancer_https_listener" {
+  default_backend_set_name = oci_load_balancer_backend_set.k3s_loadbalancer_backendset.name
+  load_balancer_id         = oci_load_balancer_load_balancer.k3s_loadbalancer.id
+  name                     = "k3s_loadbalancer_https_listener"
+  port                     = "443"
+  protocol                 = "TCP" # cert-manager and ingresses handle actual HTTPS
+}
