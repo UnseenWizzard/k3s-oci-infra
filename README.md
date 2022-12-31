@@ -39,7 +39,12 @@ ssh_key_path         = {path to the ssh public key wish to access the compute in
 # Cluster Access - via main node IP
 
 ssh into the main node and copy the config.yaml from /k3os/system/config.yaml to /var/lib/rancher/k3os/config.yaml
+```sh
+sudo cp /k3os/system/config.yaml /var/lib/rancher/k3os/config.yaml
+```
 > see https://github.com/rancher/k3os/blob/master/README.md#configuration
+
+Add a --tls-san={public ip} entry.
 
 Reload k3s (e.g. reboot) the instance and connect back to it
 
@@ -57,3 +62,9 @@ scp rancher@{public ip}:/etc/rancher/k3s/k3s.yaml ~/.kube/config
 Open ~/.kube/config and replace the local IP configured in cluster.server with the public one. 
 
 > see https://docs.k3s.io/cluster-access#accessing-the-cluster-from-outside-with-kubectl
+
+Run kubectl get nodes to check the connection and setup.
+
+# K8S Services
+
+cd into k8s_services and run setup.sh to install cert-manager and longhorn into the cluster

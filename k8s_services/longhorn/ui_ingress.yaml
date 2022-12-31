@@ -1,0 +1,53 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: longhorn-ingress
+  namespace: longhorn-system
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: "longhorn-system-rewriteuipath@kubernetescrd,longhorn-system-basicauth@kubernetescrd"
+
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+
+    # custom max body size for file uploading like backing image uploading
+    traefik.ingress.kubernetes.io/proxy-body-size: 10000m
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: "/longhorn"
+        backend:
+          service:
+            name: longhorn-frontend
+            port:
+              number: 80
+  tls: # < placing a host in the TLS config will determine what ends up in the cert's subjectAltNames
+  - hosts:
+    - {{HOSTNAME}}
+    secretName: longhorn-ingress-cert # < cert-manager will store the created certificate in this secret.
+
+--- 
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: rewriteuipath
+  namespace: longhorn-system
+spec:
+  replacePathRegex:
+    regex: /longhorn(/|$)(.*)
+    replacement: /$2
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: basicauth
+  namespace: longhorn-system
+spec:
+  basicAuth:
+    secret: basic-auth

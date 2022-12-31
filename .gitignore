@@ -2,3 +2,5 @@
 backend.conf
 *.tfvars
 plan
+auth
+**.creds
