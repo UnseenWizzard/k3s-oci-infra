@@ -38,6 +38,12 @@ variable "public_url" {
   type = string
 }
 
+variable "base_ubuntu_image_ocid" {
+  description = "region-specific OCID of the base image to use for k3s nodes - this should be Ubuntu and is only used to bootstrap k3sos"
+  type = string
+  default = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa7xlh7c3l2xtrn53n5ezp2thnac3hgjo6biolfxisk3l4igfl3xba"
+}
+
 locals {
   node_config = {
     main_server_ip      = "10.0.0.42"

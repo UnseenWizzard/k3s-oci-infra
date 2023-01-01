@@ -11,7 +11,7 @@ resource "oci_core_instance" "k3s_server_01" {
   }
 
   source_details {
-    source_id   = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa7xlh7c3l2xtrn53n5ezp2thnac3hgjo6biolfxisk3l4igfl3xba"
+    source_id   = var.base_ubuntu_image_ocid
     source_type = "image"
   }
 
@@ -54,7 +54,7 @@ resource "oci_core_instance" "k3s_server_02" {
   }
 
   source_details {
-    source_id   = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa7xlh7c3l2xtrn53n5ezp2thnac3hgjo6biolfxisk3l4igfl3xba"
+    source_id   = var.base_ubuntu_image_ocid
     source_type = "image"
   }
 
@@ -99,7 +99,7 @@ resource "oci_core_instance" "k3s_agent_01" {
   }
 
   source_details {
-    source_id   = "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaa7xlh7c3l2xtrn53n5ezp2thnac3hgjo6biolfxisk3l4igfl3xba"
+    source_id   = var.base_ubuntu_image_ocid
     source_type = "image"
   }
 
