@@ -23,8 +23,8 @@ resource "oci_load_balancer_backend_set" "k3s_loadbalancer_backendset" {
   policy           = "ROUND_ROBIN"
 
   health_checker {
-    port                = "443"
-    protocol            = "TCP"
+    port     = "443"
+    protocol = "TCP"
   }
 
 }
