@@ -24,6 +24,8 @@ Then run terraform init -backend-config=backend.conf to initialize.
 
 This needs you to define a set of tf variables to connect to your OCI account and configure the created network and compute instances.
 
+> see https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/terraformproviderconfiguration.htm#APIKeyAuth for how API key auth is set up
+
 You need to define the following in a .tfvars file or env vars:
 
 ```
